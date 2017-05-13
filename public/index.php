@@ -18,11 +18,20 @@ echo CLIENT_SECRET_PATH;
  * @return Google_Client the authorized client object
  */
 function getClient() {
+$client = new Google_Client();
+$client->setApplicationName("Google Calendar PHP Starter Application");
+$client->setClientId('');
+$client->setClientSecret('');
+$client->setRedirectUri('test.php');
+$client->setDeveloperKey('qfKIDuKuqG6ndxLL_qFeb4H0');
+$cal = new Google_CalendarService($client);
+
+/*
   $client = new Google_Client();
   $client->setApplicationName(APPLICATION_NAME);
   $client->setScopes(SCOPES);
   $client->setAuthConfig(CLIENT_SECRET_PATH);
-  $client->setAccessType('offline');
+  $client->setAccessType('offline');*/
 
   // Load previously authorized credentials from a file.
   $credentialsPath = expandHomeDirectory(CREDENTIALS_PATH);
