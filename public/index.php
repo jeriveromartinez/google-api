@@ -21,6 +21,7 @@ function getClient()
     $client->setClientId('');
     $client->setClientSecret('');
     $client->setRedirectUri('test.php');
+    $client->setScopes(SCOPES);
     $client->setDeveloperKey('qfKIDuKuqG6ndxLL_qFeb4H0');
     $client->setAccessType('offline');
 
