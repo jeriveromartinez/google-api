@@ -1,58 +1,65 @@
 <?php
-    require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 define('APPLICATION_NAME', 'Google Calendar API PHP Quickstart');
 //define('CREDENTIALS_PATH', '~/.credentials/calendar-php-quickstart.json');
-define('CLIENT_SECRET_PATH', str_replace('\\','/',__DIR__ . '/../client_secret.json'));
+define('CLIENT_SECRET_PATH', str_replace('\\', '/', __DIR__ . '/../client_secret.json'));
 // If modifying these scopes, delete your previously saved credentials
 // at ~/.credentials/calendar-php-quickstart.json
 define('SCOPES', implode(' ', array(
-  Google_Service_Calendar::CALENDAR_READONLY)
+        Google_Service_Calendar::CALENDAR_READONLY)
 ));
-
-echo CLIENT_SECRET_PATH;
-//die;
 
 /**
  * Returns an authorized API client.
  * @return Google_Client the authorized client object
  */
-function getClient() {
-  $client = new Google_Client();
-  $client->setApplicationName(APPLICATION_NAME);
-  $client->setScopes(SCOPES);
-  $client->setAuthConfig(CLIENT_SECRET_PATH);
-  $client->setAccessType('offline');
+function getClient()
+{
+    $client = new Google_Client();
+    $client->setApplicationName("Google Calendar PHP Starter Application");
+    $client->setClientId('');
+    $client->setClientSecret('');
+    $client->setRedirectUri('test.php');
+    $client->setDeveloperKey('qfKIDuKuqG6ndxLL_qFeb4H0');
+    $client->setAccessType('offline');
 
-  // Load previously authorized credentials from a file.
-  $credentialsPath = expandHomeDirectory(CREDENTIALS_PATH);
-  if (file_exists($credentialsPath)) {
-    $accessToken = json_decode(file_get_contents($credentialsPath), true);
-  } else {
-    // Request authorization from the user.
-    $authUrl = $client->createAuthUrl();
-    printf("Open the following link in your browser:\n%s\n", $authUrl);
-    print 'Enter verification code: ';
-    $authCode = trim(fgets(STDIN));
+    /*
+      $client = new Google_Client();
+      $client->setApplicationName(APPLICATION_NAME);
+      $client->setScopes(SCOPES);
+      $client->setAuthConfig(CLIENT_SECRET_PATH);
+      $client->setAccessType('offline');*/
 
-    // Exchange authorization code for an access token.
-    $accessToken = $client->fetchAccessTokenWithAuthCode($authCode);
+    // Load previously authorized credentials from a file.
+    $credentialsPath = expandHomeDirectory(CREDENTIALS_PATH);
+    if (file_exists($credentialsPath)) {
+        $accessToken = json_decode(file_get_contents($credentialsPath), true);
+    } else {
+        // Request authorization from the user.
+        $authUrl = $client->createAuthUrl();
+        printf("Open the following link in your browser:\n%s\n", $authUrl);
+        print 'Enter verification code: ';
+        $authCode = trim(fgets(STDIN));
 
-    // Store the credentials to disk.
-    if(!file_exists(dirname($credentialsPath))) {
-      mkdir(dirname($credentialsPath), 0700, true);
+        // Exchange authorization code for an access token.
+        $accessToken = $client->fetchAccessTokenWithAuthCode($authCode);
+
+        // Store the credentials to disk.
+        if (!file_exists(dirname($credentialsPath))) {
+            mkdir(dirname($credentialsPath), 0700, true);
+        }
+        file_put_contents($credentialsPath, json_encode($accessToken));
+        printf("Credentials saved to %s\n", $credentialsPath);
     }
-    file_put_contents($credentialsPath, json_encode($accessToken));
-    printf("Credentials saved to %s\n", $credentialsPath);
-  }
-  $client->setAccessToken($accessToken);
+    $client->setAccessToken($accessToken);
 
-  // Refresh the token if it's expired.
-  if ($client->isAccessTokenExpired()) {
-    $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
-    file_put_contents($credentialsPath, json_encode($client->getAccessToken()));
-  }
-  return $client;
+    // Refresh the token if it's expired.
+    if ($client->isAccessTokenExpired()) {
+        $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
+        file_put_contents($credentialsPath, json_encode($client->getAccessToken()));
+    }
+    return $client;
 }
 
 /**
@@ -60,12 +67,13 @@ function getClient() {
  * @param string $path the path to expand.
  * @return string the expanded path.
  */
-function expandHomeDirectory($path) {
-  $homeDirectory = getenv('HOME');
-  if (empty($homeDirectory)) {
-    $homeDirectory = getenv('HOMEDRIVE') . getenv('HOMEPATH');
-  }
-  return str_replace('~', realpath($homeDirectory), $path);
+function expandHomeDirectory($path)
+{
+    $homeDirectory = getenv('HOME');
+    if (empty($homeDirectory)) {
+        $homeDirectory = getenv('HOMEDRIVE') . getenv('HOMEPATH');
+    }
+    return str_replace('~', realpath($homeDirectory), $path);
 }
 
 // Get the API client and construct the service object.
@@ -75,24 +83,22 @@ $service = new Google_Service_Calendar($client);
 // Print the next 10 events on the user's calendar.
 $calendarId = 'primary';
 $optParams = array(
-  'maxResults' => 10,
-  'orderBy' => 'startTime',
-  'singleEvents' => TRUE,
-  'timeMin' => date('c'),
+    'maxResults' => 10,
+    'orderBy' => 'startTime',
+    'singleEvents' => TRUE,
+    'timeMin' => date('c'),
 );
 $results = $service->events->listEvents($calendarId, $optParams);
 
 if (count($results->getItems()) == 0) {
-  print "No upcoming events found.\n";
+    print "No upcoming events found.\n";
 } else {
-  print "Upcoming events:\n";
-  foreach ($results->getItems() as $event) {
-    $start = $event->start->dateTime;
-    if (empty($start)) {
-      $start = $event->start->date;
+    print "Upcoming events:\n";
+    foreach ($results->getItems() as $event) {
+        $start = $event->start->dateTime;
+        if (empty($start)) {
+            $start = $event->start->date;
+        }
+        printf("%s (%s)\n", $event->getSummary(), $start);
     }
-    printf("%s (%s)\n", $event->getSummary(), $start);
-  }
 }
-
-?>
