@@ -17,7 +17,7 @@ echo isset($_SESSION['token']);
 
 if (!isset($_SESSION['token'])) {
     $authUrl = $client->createAuthUrl();
-    echo '<a href="' + $authUrl + '" target="_blank">Authorize</a>';
+    echo "<a href='$authUrl' target='_blank'>Authorize</a>";
 }
 
 if (isset($_SESSION['token'])) {
