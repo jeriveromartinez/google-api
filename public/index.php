@@ -13,7 +13,7 @@ $client->setRedirectUri('https://googlecaltest.herokuapp.com/test.php');
 $client->setScopes(SCOPES);
 $client->setAccessType('offline');
 
-echo $_SESSION['token'];
+echo isset($_SESSION['token']);
 
 if (!isset($_SESSION['token'])) {
     $authUrl = $client->createAuthUrl();
