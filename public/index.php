@@ -18,8 +18,8 @@ function getClient()
 {
     $client = new Google_Client();
     $client->setApplicationName("Google Calendar PHP Starter Application");
-    $client->setClientId('399495627814-6fi3iumot5hu0jtsugh8biq4if9efb5g.apps.googleusercontent.com');
-    $client->setClientSecret('qfKIDuKuqG6ndxLL_qFeb4H0');
+    $client->setClientId('481341427692-md2djtmjb3c8l053fqlcfa2bh0fphcke.apps.googleusercontent.com');
+    $client->setClientSecret('TJMJjsrHsnP8iMUrlk0L6LD4');
     $client->setRedirectUri('https://googlecaltest.herokuapp.com/test.php');
     $client->setScopes(SCOPES);
     $client->setDeveloperKey('');
