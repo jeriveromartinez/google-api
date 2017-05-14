@@ -13,6 +13,8 @@ $client->setRedirectUri('https://googlecaltest.herokuapp.com/test.php');
 $client->setScopes(SCOPES);
 $client->setAccessType('offline');
 
+echo $_SESSION['token'];
+
 if (!isset($_SESSION['token'])) {
     $authUrl = $client->createAuthUrl();
     echo '<a href="' + $authUrl + '" target="_blank">Authorize</a>';
@@ -30,6 +32,6 @@ if (isset($_SESSION['token'])) {
     $listCalendar = $service->calendarList->listCalendarList()->getItems();
     $events = $service->events->listEvents('primary', $optParams);
 
-    var_dump($listCalendar);
-    var_dump($events);
+    echo var_dump($listCalendar);
+    echo var_dump($events);
 }
