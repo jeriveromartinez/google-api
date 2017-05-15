@@ -75,12 +75,14 @@ function getCalendarList($client)
             }
         }*/
 
+        /** @var Google_Service_Calendar_CalendarListEntry $event */
         foreach ($events->getItems() as $event) {
             $start = $event->start->dateTime;
-            if (empty($start)) {
+            print_r($event);
+            /*if (empty($start)) {
                 $start = $event->start->date;
             }
-            printf("%s (%s)\n", $event->getSummary(), $start);
+            printf("%s (%s)\n", $event->getSummary(), $start);*/
         }
 
     } else {
