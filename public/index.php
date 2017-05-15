@@ -45,6 +45,9 @@ function getClient()
     return $client;
 }
 
+/**
+ * @param $client
+ */
 function getCalendarList($client)
 {
     if ($client->getAccessToken()) {
@@ -81,13 +84,14 @@ function getCalendarList($client)
             //print_r($event);
             $title = $event->getSummary();
             $desc = $event->getDescription();
+            /** @var Google_Service_Calendar_EventDateTime $dateB */
             $dateB = $event->getStart();
             $dateE = $event->getEnd();
 
             /*if (empty($start)) {
                 $start = $event->start->date;
             }*/
-            printf("%s - %s (%s)-(%s)\n", $title, $desc, $dateB, $dateE);
+            printf("%s - %s (%s)-(%s)\n", $title, $desc, $dateB->getDate(), $dateE->getDate());
         }
 
     } else {
