@@ -1,37 +1,69 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/google/apiclient/src/Google/autoload.php';
+
+define('APPLICATION_NAME', 'Test');
+define('CREDENTIALS_PATH', __DIR__ . '/../calendar/drive-php-quickstart.json');
+define('CLIENT_SECRET_PATH', __DIR__ . '/../client_secret.json');
 define('SCOPES', implode(' ', array(
-        Google_Service_Calendar::CALENDAR_READONLY)
+        Google_Service_Calendar::CALENDAR)
 ));
 
-session_start();
-$client = new Google_Client();
-$client->setApplicationName("Google Calendar PHP Starter Application");
-$client->setClientId('481341427692-md2djtmjb3c8l053fqlcfa2bh0fphcke.apps.googleusercontent.com');
-$client->setClientSecret('TJMJjsrHsnP8iMUrlk0L6LD4');
-$client->setRedirectUri('https://googlecaltest.herokuapp.com/test.php');
-$client->setScopes(SCOPES);
-$client->setAccessType('offline');
+/**
+ * Returns an authorized API client.
+ * @return Google_Client the authorized client object
+ */
+function getClient()
+{
+    $client = new Google_Client();
+    $client->setApplicationName(APPLICATION_NAME);
+    $client->setScopes(SCOPES);
+    $client->setAuthConfigFile(CLIENT_SECRET_PATH);
+    $client->setIncludeGrantedScopes(true);
+    $client->setAccessType('offline');
 
-echo isset($_SESSION['token']);
+    // Load previously authorized credentials from a file.
+    if (file_exists(CREDENTIALS_PATH)) {
+        $accessToken = file_get_contents(CREDENTIALS_PATH);
+    } else {
+        // Request authorization from the user.
+        $authUrl = $client->createAuthUrl();
+        header("Location: $authUrl");
+    }
+    $client->setAccessToken($accessToken);
 
-if (!isset($_SESSION['token'])) {
-    $authUrl = $client->createAuthUrl();
-    echo "<a href='$authUrl' target='_blank'>Authorize</a>";
+    // Refresh the token if it's expired.
+    if ($client->isAccessTokenExpired()) {
+        $client->refreshToken($client->getRefreshToken());
+        file_put_contents(CREDENTIALS_PATH, $client->getAccessToken());
+    }
+    return $client;
 }
 
-if (isset($_SESSION['token'])) {
-    $client->setAccessToken($_SESSION['token']);
-    $service = new Google_Service_Calendar();
-    $optParams = array(
-        'maxResults' => 10,
-        'orderBy' => 'startTime',
-        'singleEvents' => TRUE,
-        'timeMin' => date('c'),
-    );
-    $listCalendar = $service->calendarList->listCalendarList()->getItems();
-    $events = $service->events->listEvents('primary', $optParams);
+// Get the API client and construct the service object.
+$client = getClient();
+$service = new Google_Service_Calendar($client);
 
-    echo var_dump($listCalendar);
-    echo var_dump($events);
-}
+// Print the next 10 events on the user's calendar.
+$calendarId = 'primary';
+$optParams = array(
+    'maxResults' => 10,
+    'orderBy' => 'startTime',
+    'singleEvents' => TRUE,
+    'timeMin' => date('c'),
+);
+$results = $service->events->listEvents($calendarId, $optParams);
+
+printf($results);
+
+/*if (count($results->getItems()) == 0) {
+    print "No upcoming events found.\n";
+} else {
+    print "Upcoming events:\n";
+    foreach ($results->getItems() as $event) {
+        $start = $event->start->dateTime;
+        if (empty($start)) {
+            $start = $event->start->date;
+        }
+        printf("%s (%s)\n", $event->getSummary(), $start);
+    }
+}*/
