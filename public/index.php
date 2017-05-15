@@ -48,13 +48,13 @@ function getClient()
         $cals = $event->calendarList->listCalendarList();
 
         while (true) {
-            foreach ($cals->getItems() as $calendarListEntry) {
-                echo "<a href='Oauth2.php?type=event&id=" . $calendarListEntry->id . " '>" . $calendarListEntry->getSummary() . "</a><br>\n";
+            foreach ($cals->getItems() as $event) {
+                echo $event->getSummary();
             }
-            $pageToken = $calendarList->getNextPageToken();
+            $pageToken = $events->getNextPageToken();
             if ($pageToken) {
                 $optParams = array('pageToken' => $pageToken);
-                $calendarList = $service->calendarList->listCalendarList($optParams);
+                $events = $service->events->listEvents('primary', $optParams);
             } else {
                 break;
             }
