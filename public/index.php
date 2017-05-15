@@ -51,7 +51,23 @@ function getCalendarList($client)
         echo '<hr><font size=+1>I have access to your calendar</font><br/>';
         $calendar = new Google_Service_Calendar($client);
         $calendarList = $calendar->calendarList->listCalendarList();
-        print_r($calendarList->getItems()[0]->getSummary());
+        $id = $calendarList->getItems()[0]->getSummary();
+        print_r($id);
+
+        $events = $calendar->events->listEvents('primary');
+
+        while (true) {
+            foreach ($events->getItems() as $event) {
+                echo $event->getSummary();
+            }
+            $pageToken = $events->getNextPageToken();
+            if ($pageToken) {
+                $optParams = array('pageToken' => $pageToken);
+                $events = $calendar->events->listEvents('primary', $optParams);
+            } else {
+                break;
+            }
+        }
 
     } else {
         $authUrl = $client->createAuthUrl();
