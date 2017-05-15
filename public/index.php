@@ -52,9 +52,10 @@ function getCalendarList($client)
         $calendar = new Google_Service_Calendar($client);
         $calendarList = $calendar->calendarList->listCalendarList();
         $id = $calendarList->getItems()[0]->getSummary();
-        echo $id + '<br/>';
+        echo print_r($id);
 
         $events = $calendar->events->listEvents('primary');
+        echo "<br/>";
 
         while (true) {
             foreach ($events->getItems() as $event) {
