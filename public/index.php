@@ -53,10 +53,16 @@ function getCalendarList($client)
         $calendarList = $calendar->calendarList->listCalendarList();
         $id = $calendarList->getItems()[0]->getSummary();
 
-        $events = $calendar->events->listEvents('primary');
+        $optParams = array(
+            'maxResults' => 10,
+            'orderBy' => 'startTime',
+            'singleEvents' => TRUE,
+            'timeMin' => date('c'),
+        );
+        $events = $calendar->events->listEvents('primary', $optParams);
         echo "$id<br/>";
 
-        while (true) {
+        /*while (true) {
             foreach ($events->getItems() as $event) {
                 $title = $event->getSummary();
                 $desc = $event->getDescription();
@@ -69,6 +75,14 @@ function getCalendarList($client)
             } else {
                 break;
             }
+        }*/
+
+        foreach ($events->getItems() as $event) {
+            $start = $event->start->dateTime;
+            if (empty($start)) {
+                $start = $event->start->date;
+            }
+            printf("%s (%s)\n", $event->getSummary(), $start);
         }
 
     } else {
