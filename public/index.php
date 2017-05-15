@@ -52,13 +52,13 @@ function getCalendarList($client)
         $calendar = new Google_Service_Calendar($client);
         $calendarList = $calendar->calendarList->listCalendarList();
         $id = $calendarList->getItems()[0]->getSummary();
-        print_r($id);
+        echo $id + '<br/>';
 
         $events = $calendar->events->listEvents('primary');
 
         while (true) {
             foreach ($events->getItems() as $event) {
-                echo $event->getSummary();
+                echo $event->getSummary() + '<br/>';
             }
             $pageToken = $events->getNextPageToken();
             if ($pageToken) {
