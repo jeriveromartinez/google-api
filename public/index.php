@@ -51,10 +51,10 @@ function getCalendarList($client)
         echo '<hr><font size=+1>I have access to your calendar</font>\n';
         $calendar = new Google_Service_Calendar($client);
         $calendarList = $calendar->calendarList->listCalendarList();
-        print_r($calendarList->getItems());
+        //print_r($calendarList->getItems());
         while (true) {
             foreach ($calendarList->getItems() as $calendarListEntry) {
-                $calendarListEntry = $calendar->calendarList->get('calendarId');
+                $calendarListEntry = $calendar->calendarList->get('jeriveromartinez@gmail.com');
                 echo $calendarListEntry->getSummary();
             }
             $pageToken = $calendarList->getNextPageToken();
