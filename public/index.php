@@ -46,7 +46,20 @@ function getClient()
         echo "<hr><font size=+1>I have access to your calendar</font>";
         $event = new Google_Service_Calendar($client);
         $cals = $event->calendarList->listCalendarList();
-        print_r($cals);
+
+        while (true) {
+            foreach ($cals->getItems() as $calendarListEntry) {
+                echo "<a href='Oauth2.php?type=event&id=" . $calendarListEntry->id . " '>" . $calendarListEntry->getSummary() . "</a><br>\n";
+            }
+            $pageToken = $calendarList->getNextPageToken();
+            if ($pageToken) {
+                $optParams = array('pageToken' => $pageToken);
+                $calendarList = $service->calendarList->listCalendarList($optParams);
+            } else {
+                break;
+            }
+        }
+
         /*$event->setSummary('Halloween');
         $event->setLocation('The Neighbourhood');
         $start = new Google_EventDateTime();
@@ -72,7 +85,7 @@ $client = getClient();
 $service = new Google_Service_Calendar($client);
 
 // Print the next 10 events on the user's calendar.
-$calendarId = 'primary';
+/*$calendarId = 'primary';
 $optParams = array(
     'maxResults' => 10,
     'orderBy' => 'startTime',
@@ -81,7 +94,7 @@ $optParams = array(
 );
 $results = $service->events->listEvents($calendarId, $optParams);
 
-printf($results);
+printf($results);*/
 
 /*if (count($results->getItems()) == 0) {
     print "No upcoming events found.\n";
