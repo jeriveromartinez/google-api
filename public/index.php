@@ -88,10 +88,12 @@ function getCalendarList($client)
             $dateB = $event->getStart();
             $dateE = $event->getEnd();
 
-            /*if (empty($start)) {
-                $start = $event->start->date;
-            }*/
-            printf("%s - %s (%s)-(%s)\n", $title, $desc, $dateB->getDate(), $dateE->getDate());
+            if (empty($dateB))
+                $dateB = $event->start->date;
+            if (empty($dateE))
+                $dateE = $event->end->date;
+
+            printf("%s - %s (%s)-(%s)<br/>", $title, $desc, $dateB->getDate(), $dateE->getDate());
         }
 
     } else {
