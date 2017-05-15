@@ -45,7 +45,7 @@ function getClient()
     if ($client->getAccessToken()) {
         echo "<hr><font size=+1>I have access to your calendar</font>";
         $event = new Google_Service_Calendar($client);
-        $cals = $service->calendarList->listCalendarList();
+        $cals = $event->calendarList->listCalendarList();
         print_r($cals);
         /*$event->setSummary('Halloween');
         $event->setLocation('The Neighbourhood');
