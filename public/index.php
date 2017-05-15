@@ -58,7 +58,8 @@ function getCalendarList($client)
 
         while (true) {
             foreach ($events->getItems() as $event) {
-                echo "<p>$event->getSummary()</p>";
+                $title = $event->getSummary();
+                echo "<p>$title</p>";
             }
             $pageToken = $events->getNextPageToken();
             if ($pageToken) {
