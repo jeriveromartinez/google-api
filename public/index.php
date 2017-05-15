@@ -56,7 +56,6 @@ function getCalendarList($client)
         $optParams = array(
             'maxResults' => 10,
             'orderBy' => 'startTime',
-            'singleEvents' => TRUE,
             'timeMin' => date('c'),
         );
         $events = $calendar->events->listEvents('primary', $optParams);
