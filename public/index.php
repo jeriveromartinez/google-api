@@ -16,11 +16,11 @@ function getClient()
 {
     session_start();
 
-    if ((isset($_SESSION)) && (!empty($_SESSION))) {
-        echo "There are cookies<br>";
-        echo "<pre>";
+    if (isset($_SESSION) && (!empty($_SESSION))) {
+        echo 'There are cookies<br>';
+        echo '<pre>';
         print_r($_SESSION);
-        echo "</pre>";
+        echo '</pre>';
     }
     $client = new Google_Client();
     $client->setApplicationName(APPLICATION_NAME);
@@ -42,47 +42,37 @@ function getClient()
         $client->setAccessToken($_SESSION['token']);
     }
 
+    return $client;
+}
+
+function getCalendarList($client)
+{
     if ($client->getAccessToken()) {
-        echo "<hr><font size=+1>I have access to your calendar</font>";
-        $event = new Google_Service_Calendar($client);
-        $cals = $event->calendarList->listCalendarList();
+        echo '<hr><font size=+1>I have access to your calendar</font>';
+        $calendar = new Google_Service_Calendar($client);
+        $calendarList = $calendar->calendarList->listCalendarList();
 
         while (true) {
-            foreach ($cals->getItems() as $event) {
-                echo $event->getSummary();
+            foreach ($calendarList->getItems() as $calendarListEntry) {
+                echo $calendarListEntry->getSummary();
             }
-            $pageToken = $events->getNextPageToken();
+            $pageToken = $calendarList->getNextPageToken();
             if ($pageToken) {
                 $optParams = array('pageToken' => $pageToken);
-                $events = $service->events->listEvents('primary', $optParams);
+                $calendarList = $calendar->calendarList->listCalendarList($optParams);
             } else {
                 break;
             }
         }
-
-        /*$event->setSummary('Halloween');
-        $event->setLocation('The Neighbourhood');
-        $start = new Google_EventDateTime();
-        $start->setDateTime('2013-9-29T10:00:00.000-05:00');
-        $event->setStart($start);
-        $end = new Google_EventDateTime();
-        $end->setDateTime('2013-9-29T10:25:00.000-05:00');
-        $event->setEnd($end);
-        $createdEvent = $cal->events->insert('###', $event);
-        echo '<br><font size=+1>Event created</font>';
-
-        echo '<hr><br><font size=+1>Already connected</font> (No need to login)';*/
-
     } else {
         $authUrl = $client->createAuthUrl();
         print "<hr><br><font size=+2><a href='$authUrl'>Connect Me!</a></font>";
     }
-    return $client;
 }
 
 // Get the API client and construct the service object.
 $client = getClient();
-$service = new Google_Service_Calendar($client);
+getCalendarList($client);
 
 // Print the next 10 events on the user's calendar.
 /*$calendarId = 'primary';
