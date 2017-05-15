@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/../vendor/google/apiclient/src/Google/autoload.php';
+require_once '/../vendor/google/apiclient/src/Google_Client.php';
+require_once '/../vendor/google/apiclient/src/contrib/Google_CalendarService.php';
 
 define('APPLICATION_NAME', 'Test');
 define('CREDENTIALS_PATH', __DIR__ . '/../calendar/drive-php-quickstart.json');
