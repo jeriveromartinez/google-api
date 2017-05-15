@@ -48,11 +48,11 @@ function getClient()
 function getCalendarList($client)
 {
     if ($client->getAccessToken()) {
-        echo '<hr><font size=+1>I have access to your calendar</font>';
+        echo '<hr><font size=+1>I have access to your calendar</font>\n';
         $calendar = new Google_Service_Calendar($client);
         $calendarList = $calendar->calendarList->listCalendarList();
-
-        while (true) {
+        print_r($calendarList->getItems());
+        /*while (true) {
             foreach ($calendarList->getItems() as $calendarListEntry) {
                 echo $calendarListEntry->getSummary();
             }
@@ -63,7 +63,7 @@ function getCalendarList($client)
             } else {
                 break;
             }
-        }
+        }*/
     } else {
         $authUrl = $client->createAuthUrl();
         print "<hr><br><font size=+2><a href='$authUrl'>Connect Me!</a></font>";
