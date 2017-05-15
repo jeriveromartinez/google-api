@@ -44,8 +44,10 @@ function getClient()
 
     if ($client->getAccessToken()) {
         echo "<hr><font size=+1>I have access to your calendar</font>";
-        $event = new Google_Event();
-        $event->setSummary('Halloween');
+        $event = new Google_Service_Calendar($client);
+        $cals = $service->calendarList->listCalendarList();
+        print_r($cals);
+        /*$event->setSummary('Halloween');
         $event->setLocation('The Neighbourhood');
         $start = new Google_EventDateTime();
         $start->setDateTime('2013-9-29T10:00:00.000-05:00');
@@ -56,7 +58,7 @@ function getClient()
         $createdEvent = $cal->events->insert('###', $event);
         echo '<br><font size=+1>Event created</font>';
 
-        echo '<hr><br><font size=+1>Already connected</font> (No need to login)';
+        echo '<hr><br><font size=+1>Already connected</font> (No need to login)';*/
 
     } else {
         $authUrl = $client->createAuthUrl();
