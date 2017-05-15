@@ -57,7 +57,7 @@ function getCalendarList($client)
             'maxResults' => 10,
             'orderBy' => 'startTime',
         );
-        $events = $calendar->events->listEvents('primary', $optParams);
+        $events = $calendar->events->listEvents('primary');
         echo "$id<br/>";
 
         /*while (true) {
