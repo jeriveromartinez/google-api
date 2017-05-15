@@ -75,14 +75,19 @@ function getCalendarList($client)
             }
         }*/
 
-        /** @var Google_Service_Calendar_CalendarListEntry $event */
+        /** @var Google_Service_Calendar_Event $event */
         foreach ($events->getItems() as $event) {
-            $start = $event->start->dateTime;
-            print_r($event);
+            //$start = $event->start->dateTime;
+            //print_r($event);
+            $title = $event->getSummary();
+            $desc = $event->getDescription();
+            $dateB = $event->getStart();
+            $dateE = $event->getEnd();
+
             /*if (empty($start)) {
                 $start = $event->start->date;
-            }
-            printf("%s (%s)\n", $event->getSummary(), $start);*/
+            }*/
+            printf("%s - %s (%s)-(%s)\n", $title, $desc, $dateB, $dateE);
         }
 
     } else {
