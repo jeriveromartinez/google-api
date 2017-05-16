@@ -112,7 +112,7 @@ function addEvent($calendar)
     $start->setDateTime(new DateTime());
     $event->setStart($start);
     $end = new Google_Service_Calendar_EventDateTime();
-    $end->setDateTime(new DateTime());
+    $end->setDateTime(new DateTime('tomorrow'));
     $event->setEnd($end);
 
     $calendar->events->insert('primary', $event);
