@@ -105,8 +105,6 @@ function getCalendarList($calendar)
  */
 function addEvent($calendar)
 {
-    print_r($calendar);
-    echo '<br/>';
     $event = new Google_Service_Calendar_Event();
     $event->setSummary("my test 2");
     $event->setLocation('The Neighbourhood');
@@ -117,8 +115,8 @@ function addEvent($calendar)
     $end->setDateTime('2017-05-20T17:00:00-07:00');
     $event->setEnd($end);
 
-    print_r($event);
     $calendar->events->insert('primary', $event);
+    echo "Event save";
 }
 
 // Get the API client and construct the service object.
