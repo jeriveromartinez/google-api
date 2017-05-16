@@ -108,13 +108,13 @@ function addEvent($calendar)
     print_r($calendar);
     echo '<br/>';
     $event = new Google_Service_Calendar_Event();
-    $event->setSummary("my test");
+    $event->setSummary("my test 2");
     $event->setLocation('The Neighbourhood');
     $start = new Google_Service_Calendar_EventDateTime();
-    $start->setDateTime('2017-05-15T17:00:00-07:00');
+    $start->setDateTime('2017-05-18T17:00:00-07:00');
     $event->setStart($start);
     $end = new Google_Service_Calendar_EventDateTime();
-    $end->setDateTime('2017-05-16T17:00:00-07:00');
+    $end->setDateTime('2017-05-20T17:00:00-07:00');
     $event->setEnd($end);
 
     print_r($event);
