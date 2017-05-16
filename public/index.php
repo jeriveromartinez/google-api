@@ -10,18 +10,12 @@ define('SCOPES', implode(' ', array(
 
 /**
  * Returns an authorized API client.
- * @return Google_Client the authorized client object
+ * @return Google_Service_Calendar the authorized client object
  */
 function getClient()
 {
     session_start();
 
-    if (isset($_SESSION) && (!empty($_SESSION))) {
-        echo 'There are cookies<br>';
-        echo '<pre>';
-        print_r($_SESSION);
-        echo '</pre>';
-    }
     $client = new Google_Client();
     $client->setApplicationName(APPLICATION_NAME);
     $client->setScopes(SCOPES);
@@ -42,69 +36,81 @@ function getClient()
         $client->setAccessToken($_SESSION['token']);
     }
 
-    return $client;
+    if ($client->getAccessToken()) {
+        $calendar = new Google_Service_Calendar($client);
+        return $calendar;
+    } else {
+        $authUrl = $client->createAuthUrl();
+        header("Location: $authUrl");
+        // print "<hr><br><font size=+2><a href='$authUrl'>Connect Me!</a></font>";
+    }
+
+
 }
 
 /**
- * @param $client
+ * @param Google_Service_Calendar $calendar
  */
-function getCalendarList($client)
+function getCalendarList($calendar)
 {
-    if ($client->getAccessToken()) {
-        echo '<hr><font size=+1>I have access to your calendar</font><br/>';
-        $calendar = new Google_Service_Calendar($client);
-        $calendarList = $calendar->calendarList->listCalendarList();
-        $id = $calendarList->getItems()[0]->getSummary();
+    echo '<hr><font size=+1>I have access to your calendar</font><br/>';
 
-        $optParams = array(
-            'maxResults' => 10,
-            'orderBy' => 'startTime',
-        );
-        $events = $calendar->events->listEvents('primary');
-        echo "$id<br/>";
+    $calendarList = $calendar->calendarList->listCalendarList();
+    $id = $calendarList->getItems()[0]->getSummary();
 
-        /*while (true) {
-            foreach ($events->getItems() as $event) {
-                $title = $event->getSummary();
-                $desc = $event->getDescription();
-                echo "<p>$title<div>$desc</div></p>";
-            }
-            $pageToken = $events->getNextPageToken();
-            if ($pageToken) {
-                $optParams = array('pageToken' => $pageToken);
-                $events = $calendar->events->listEvents('primary', $optParams);
-            } else {
-                break;
-            }
-        }*/
+    $optParams = array(
+        'maxResults' => 10,
+        'orderBy' => 'startTime',
+    );
+    $events = $calendar->events->listEvents('primary');
+    echo "$id<br/>";
 
-        /** @var Google_Service_Calendar_Event $event */
+    /*while (true) {
         foreach ($events->getItems() as $event) {
-            //$start = $event->start->dateTime;
-            //print_r($event);
             $title = $event->getSummary();
             $desc = $event->getDescription();
-            /** @var Google_Service_Calendar_EventDateTime $dateB */
-            $dateB = $event->getStart();
-            $dateE = $event->getEnd();
-
-            if (empty($dateB))
-                $dateB = $event->start->date;
-            if (empty($dateE))
-                $dateE = $event->end->date;
-
-            printf("%s - %s (%s)-(%s)<br/>", $title, $desc, $dateB->getDate(), $dateE->getDate());
+            echo "<p>$title<div>$desc</div></p>";
         }
+        $pageToken = $events->getNextPageToken();
+        if ($pageToken) {
+            $optParams = array('pageToken' => $pageToken);
+            $events = $calendar->events->listEvents('primary', $optParams);
+        } else {
+            break;
+        }
+    }*/
 
-    } else {
-        $authUrl = $client->createAuthUrl();
-        print "<hr><br><font size=+2><a href='$authUrl'>Connect Me!</a></font>";
+    /** @var Google_Service_Calendar_Event $event */
+    foreach ($events->getItems() as $event) {
+        //$start = $event->start->dateTime;
+        //print_r($event);
+        $title = $event->getSummary();
+        $desc = $event->getDescription();
+        /** @var Google_Service_Calendar_EventDateTime $dateB */
+        $dateB = $event->getStart();
+        $dateE = $event->getEnd();
+
+        if (empty($dateB))
+            $dateB = $event->start->date;
+        if (empty($dateE))
+            $dateE = $event->end->date;
+
+        printf("%s - %s (%s)-(%s)<br/>", $title, $desc, $dateB->getDate(), $dateE->getDate());
+    }
+}
+
+
+function addEvent($client)
+{
+    if ($client->getAccessToken()) {
+
     }
 }
 
 // Get the API client and construct the service object.
 $client = getClient();
 getCalendarList($client);
+
 
 // Print the next 10 events on the user's calendar.
 /*$calendarId = 'primary';
@@ -114,19 +120,3 @@ $optParams = array(
     'singleEvents' => TRUE,
     'timeMin' => date('c'),
 );
-$results = $service->events->listEvents($calendarId, $optParams);
-
-printf($results);*/
-
-/*if (count($results->getItems()) == 0) {
-    print "No upcoming events found.\n";
-} else {
-    print "Upcoming events:\n";
-    foreach ($results->getItems() as $event) {
-        $start = $event->start->dateTime;
-        if (empty($start)) {
-            $start = $event->start->date;
-        }
-        printf("%s (%s)\n", $event->getSummary(), $start);
-    }
-}*/
