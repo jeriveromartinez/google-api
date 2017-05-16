@@ -100,16 +100,28 @@ function getCalendarList($calendar)
 }
 
 
-function addEvent($client)
+/**
+ * @param Google_Service_Calendar $calendar
+ */
+function addEvent($calendar)
 {
-    if ($client->getAccessToken()) {
+    $event = new Google_Service_Calendar_Event();
+    $event->setSummary("my test");
+    $event->setLocation('The Neighbourhood');
+    $start = new Google_Service_Calendar_EventDateTime();
+    $start->setDateTime(new DateTime());
+    $event->setStart($start);
+    $end = new Google_Service_Calendar_EventDateTime();
+    $end->setDateTime(new DateTime());
+    $event->setEnd($end);
 
-    }
+    $calendar->events->insert($event);
 }
 
 // Get the API client and construct the service object.
 $client = getClient();
 getCalendarList($client);
+addEvent($client);
 
 
 // Print the next 10 events on the user's calendar.
