@@ -86,7 +86,7 @@ function getCalendarList($calendar)
         /** @var Google_Service_Calendar_EventDateTime $dateB */
         $dateB = $event->getStart();
         $dateE = $event->getEnd();
-        $id = $event->getId();
+        $id = $event->getColorId();
 
         if (empty($dateB))
             $dateB = $event->start->date;
