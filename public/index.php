@@ -53,16 +53,13 @@ function getClient()
  */
 function getCalendarList($calendar)
 {
-    echo '<hr><font size=+1>I have access to your calendar</font><br/>';
-
     $calendarList = $calendar->calendarList->listCalendarList();
     $id = $calendarList->getItems()[0]->getSummary();
 
     $optParams = array(
-        'maxResults' => 10,
-        'orderBy' => 'startTime',
+        'timeMin' => date('c'),
     );
-    $events = $calendar->events->listEvents('primary');
+    $events = $calendar->events->listEvents('primary', $optParams);
     echo "$id<br/>";
 
     /*while (true) {
@@ -89,13 +86,14 @@ function getCalendarList($calendar)
         /** @var Google_Service_Calendar_EventDateTime $dateB */
         $dateB = $event->getStart();
         $dateE = $event->getEnd();
+        $id = $event->getId();
 
         if (empty($dateB))
             $dateB = $event->start->date;
         if (empty($dateE))
             $dateE = $event->end->date;
 
-        printf("%s - %s (%s)-(%s)<br/>", $title, $desc, $dateB->getDate(), $dateE->getDate());
+        printf("%i-> %s - %s (%s)-(%s)<br/>", $id, $title, $desc, $dateB->getDate(), $dateE->getDate());
     }
 }
 
@@ -121,8 +119,8 @@ function addEvent($calendar)
 
 // Get the API client and construct the service object.
 $client = getClient();
-//getCalendarList($client);
 addEvent($client);
+getCalendarList($client);
 
 
 // Print the next 10 events on the user's calendar.
