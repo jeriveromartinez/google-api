@@ -86,7 +86,7 @@ function getCalendarList($calendar)
         /** @var Google_Service_Calendar_EventDateTime $dateB */
         $dateB = $event->getStart();
         $dateE = $event->getEnd();
-        $id = $event->getEtag();
+        $id = $event->getRecurringEventId();
 
         if (empty($dateB))
             $dateB = $event->start->date;
@@ -119,7 +119,9 @@ function addEvent($calendar)
 
 // Get the API client and construct the service object.
 $client = getClient();
-addEvent($client);
+//addEvent($client);
+//addEvent($client);
+//addEvent($client);
 getCalendarList($client);
 
 
