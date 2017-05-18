@@ -86,14 +86,14 @@ function getCalendarList($calendar)
         /** @var Google_Service_Calendar_EventDateTime $dateB */
         $dateB = $event->getStart();
         $dateE = $event->getEnd();
-        $id = $event->getRecurringEventId();
+        $id = $event->id;
 
         if (empty($dateB))
             $dateB = $event->start->date;
         if (empty($dateE))
             $dateE = $event->end->date;
 
-        printf("%i-> %s - %s (%s)-(%s)<br/>", $id, $title, $desc, $dateB->getDate(), $dateE->getDate());
+        printf("%s-> %s - %s (%s)-(%s)<br/>", $id, $title, $desc, $dateB->getDate(), $dateE->getDate());
     }
 }
 
