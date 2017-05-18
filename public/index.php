@@ -75,13 +75,15 @@ function getCalendarList($calendar)
         }
     }*/
 
+    $data = [];
     /** @var Google_Service_Calendar_Event $event */
     foreach ($events->getItems() as $event) {
-        //$start = $event->start->dateTime;
+        $data[] = $event;
+        /*//$start = $event->start->dateTime;
         //print_r($event);
         $title = $event->getSummary();
         $desc = $event->getDescription();
-        /** @var Google_Service_Calendar_EventDateTime $dateB */
+        /** @var Google_Service_Calendar_EventDateTime $dateB
         $dateB = $event->getStart();
         $dateE = $event->getEnd();
         $id = $event->id;
@@ -92,7 +94,9 @@ function getCalendarList($calendar)
             $dateE = $event->end->date;
 
         printf("%s-> %s - %s (%s)-(%s)<br/>", $id, $title, $desc, $dateB->getDate(), $dateE->getDate());
+        */
     }
+    print_r($data);
 }
 
 
