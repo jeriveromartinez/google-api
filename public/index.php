@@ -112,11 +112,12 @@ function addEvent($calendar)
     $event->setEnd($end);
 
     $calendar->events->insert('primary', $event);
-    echo "Event save";
+    echo '$event->id<br/>';
 }
 
 // Get the API client and construct the service object.
 $client = getClient();
+addEvent($client);
 getCalendarList($client);
 
 
