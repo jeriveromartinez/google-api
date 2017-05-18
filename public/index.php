@@ -121,7 +121,7 @@ function addEvent($calendar)
 
 // Get the API client and construct the service object.
 $client = getClient();
-addEvent($client);
+//addEvent($client);
 getCalendarList($client);
 
 
