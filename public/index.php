@@ -28,11 +28,11 @@ function getClient()
         $client->authenticate($_GET['code']);
         $_SESSION['token'] = $client->getAccessToken();
         header('Location: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']);
-        echo "<br>I got the token = " . $_SESSION['token']; // <-- not needed to get here unless location uncommented
+        //echo "<br>I got the token = " . $_SESSION['token']; // <-- not needed to get here unless location uncommented
     }
 
     if (isset($_SESSION['token'])) {
-        echo "<br>Getting access";
+        echo "<br/>Getting access<br/>";
         $client->setAccessToken($_SESSION['token']);
     }
 
@@ -44,8 +44,6 @@ function getClient()
         header("Location: $authUrl");
         // print "<hr><br><font size=+2><a href='$authUrl'>Connect Me!</a></font>";
     }
-
-
 }
 
 /**
@@ -119,9 +117,6 @@ function addEvent($calendar)
 
 // Get the API client and construct the service object.
 $client = getClient();
-//addEvent($client);
-//addEvent($client);
-//addEvent($client);
 getCalendarList($client);
 
 
