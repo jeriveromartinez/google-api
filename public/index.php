@@ -24,11 +24,11 @@ function getClient()
     $client->setAccessType('offline');
 
     if (isset($_GET['code'])) {
-        echo "<br>I got a code from Google = " . $_GET['code']; // You won't see this if redirected later
+        echo "<br>I got a code from Google = " . $_GET['code'];
         $client->authenticate($_GET['code']);
         $_SESSION['token'] = $client->getAccessToken();
         header('Location: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']);
-        //echo "<br>I got the token = " . $_SESSION['token']; // <-- not needed to get here unless location uncommented
+        echo "<br>I got the token = " . $_SESSION['token'];
     }
 
     if (isset($_SESSION['token'])) {
@@ -118,15 +118,5 @@ function addEvent($calendar)
 
 // Get the API client and construct the service object.
 $client = getClient();
-addEvent($client);
+//addEvent($client);
 getCalendarList($client);
-
-
-// Print the next 10 events on the user's calendar.
-/*$calendarId = 'primary';
-$optParams = array(
-    'maxResults' => 10,
-    'orderBy' => 'startTime',
-    'singleEvents' => TRUE,
-    'timeMin' => date('c'),
-);
