@@ -101,13 +101,13 @@ function getCalendarList($calendar)
 function addEvent($calendar)
 {
     $event = new Google_Service_Calendar_Event();
-    $event->setSummary("my test 2");
+    $event->setSummary('my test 2');
     $event->setLocation('The Neighbourhood');
     $start = new Google_Service_Calendar_EventDateTime();
-    $start->setDateTime('2017-05-18T17:00:00-07:00');
+    $start->setDateTime(date(\DateTime::RFC3339, '2017-05-25'));
     $event->setStart($start);
     $end = new Google_Service_Calendar_EventDateTime();
-    $end->setDateTime('2017-05-20T17:00:00-07:00');
+    $end->setDateTime(date(\DateTime::RFC3339, '2017-05-26'));
     $event->setEnd($end);
 
     $saved = $calendar->events->insert('primary', $event);
