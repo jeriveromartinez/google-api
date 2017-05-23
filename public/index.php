@@ -116,10 +116,10 @@ function addEvent($calendar)
     echo "Created $saved->id<br/>";
 }
 
-function getEspecific()
+function getEspecific($calendar)
 {
     if (isset($_GET['googleId'])) {
-        $event = $this->getCalendar()->events->get('primary', $_GET['googleId']);
+        $event = $calendar->events->get('primary', $_GET['googleId']);
         echo $event->getSummary();
     }
 }
@@ -129,5 +129,5 @@ $client = getClient();
 //addEvent($client);
 getCalendarList($client);
 echo '<p>';
-getEspecific();
+getEspecific($client);
 echo '</p>';
