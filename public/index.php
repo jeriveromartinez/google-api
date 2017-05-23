@@ -42,7 +42,7 @@ function getClient()
     } else {
         $authUrl = $client->createAuthUrl();
         header("Location: $authUrl");
-        // print "<hr><br><font size=+2><a href='$authUrl'>Connect Me!</a></font>";
+        print "<hr><br><font size=+2><a href='$authUrl'>Connect Me!</a></font>";
     }
 }
 
